@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Membership } from '../database/membership.entity';
+import { logger } from 'src/logging/logger';
 import * as nodemailer from 'nodemailer';
 import { isBefore, subDays } from 'date-fns';
 
@@ -12,10 +14,12 @@ export class CronJobService {
     constructor(
         @InjectRepository(Membership)
         private readonly membershipRepository: Repository<Membership>,
+        private readonly configService: ConfigService,
     ) {}
 
-    @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Cron job set to run daily at midnight
+    @Cron("* * * * *") // Cron job set to run daily every MINUTE!
     async handleCron() {
+        logger.info('Cron job triggered');
         const memberships = await this.membershipRepository.find();
 
         const today = new Date();
@@ -29,30 +33,34 @@ export class CronJobService {
             const subject = `Fitness+ Membership Reminder - ${membership.membershipType}`;
 
             const message = `Dear ${membership.firstName},
+            
+This is a reminder for your upcoming add-on service payment. Below are the details:
 
-            This is a reminder for your upcoming add-on service payment. Below are the details:
+Membership Type: ${membership.membershipType}
+Month: ${today.toLocaleString('default', { month: 'long' })}
+Total Amount: $${membership.totalAmount}
 
-            Membership Type: ${membership.membershipType}
-            Month: ${today.toLocaleString('default', { month: 'long' })}
-            Total Amount: $${membership.totalAmount}
+Please make sure to complete the payment to continue enjoying our services.
 
-            Please make sure to complete the payment to continue enjoying our services.
+Here is the link to your invoice for this month's add-on service: http://www.fitnesspluss.com/invoices
 
-            Here is the link to your invoice for this month's add-on service: http://www.fitness.com/invoices
-
-            Best regards,
-            Fitness+ Team`
+Best regards,
+Fitness+ Team`
 
             if (membership.isFirstMonth) {
                 if (isBefore(today, dueDate) && isBefore(today, reminderDate)) {
-                  await this.sendEmail(email, subject, message);
+                    logger.info(`Sending email to: ${email}`);
+                    await this.sendEmail(email, subject, message);
+                    logger.info('Sent mail');
                 }
             } else {
                 const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
                 const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
                 if (isBefore(startOfMonth, dueDate) && isBefore(dueDate, endOfMonth)) {
+                    logger.info(`Sending email to: ${email}`);
                     await this.sendEmail(email, subject, message);
+                    logger.info('Sent mail');
                 }
             }
         }
@@ -60,21 +68,23 @@ export class CronJobService {
 
     private async sendEmail(email: string, subject: string, message: string) {
         const transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
-            port: Number(process.env.MAIL_PORT),
+            host: this.configService.get<string>('MAIL_HOST'),
+            port: this.configService.get<number>('MAIL_PORT'),
             auth: {
-                user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASS
+                user: this.configService.get<string>('MAIL_USER'),
+                pass: this.configService.get<string>('MAIL_PASS'),
             },
         });
 
         const mailOptions = {
-            from: process.env.MAIL_USER,
+            from: this.configService.get<string>('MAIL_USER'),
             to: email,
             subject,
             text: message
-        }
+        };
 
+        logger.info('Sending email with options:', mailOptions);
         await transporter.sendMail(mailOptions);
+        logger.info('Email sent successfully');
     }
 }
