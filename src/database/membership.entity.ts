@@ -19,6 +19,9 @@ export class Membership {
     @Column()
     lastName: string;
 
+    // @Column()
+    // password: string;
+
     @Column({
         type: "enum",
         enum: MembershipType
@@ -48,7 +51,7 @@ export class Membership {
     })
     isFirstMonth: boolean
 
-    @OneToMany(() => AddOnService, addOnService => addOnService.membership)
+    @OneToMany(() => AddOnService, addOnService => addOnService.membership, { cascade: true })
     addOnServices: AddOnService[];
 
 

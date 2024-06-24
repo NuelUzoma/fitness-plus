@@ -86,11 +86,19 @@ Fitness-plus offers gym memberships with various billing structures. This backen
 
     ```json
     {
-      "firstName": "Kelechi",
-      "lastName": "Ogu",
-      "membershipType": "Annual Basic",
-      "email": "user15@yopmail.com",
-      "isFirstMonth": true
+        "firstName": "Amaka",
+        "lastName": "Chukwu",
+        "membershipType": "Annual Basic",
+        "email": "emcool17@gmail.com",
+        "isFirstMonth": false,
+        "addOnServices": [
+        {
+            "serviceName": "Personal Training"
+        },
+        {
+            "serviceName": "Towel Rentals"
+        }
+        ]
     }
     ```
 
@@ -98,15 +106,18 @@ Fitness-plus offers gym memberships with various billing structures. This backen
 
     ```json
     {
-      "firstName": "Kelechi",
-      "lastName": "Ogu",
-      "membershipType": "Annual Basic",
-      "email": "user15@yopmail.com",
-      "isFirstMonth": true,
-      "startDate": "2024-06-11T20:16:26.217Z",
-      "dueDate": "2025-06-10T23:00:00.000Z",
-      "totalAmount": 500,
-      "id": 22
+        "authorizationUrl": "https://checkout.paystack.com/tn1eewbj7vpyv94",
+        "membership": {
+        "id": 50,
+        "firstName": "Amaka",
+        "lastName": "Chukwu",
+        "membershipType": "Annual Basic",
+        "startDate": "2024-06-20",
+        "dueDate": "2025-06-20",
+        "totalAmount": 620,
+        "email": "emcool17@gmail.com",
+        "isFirstMonth": false
+        }
     }
     ```
 
@@ -162,4 +173,4 @@ Emails are sent using NodeMailer configured with a Gmail SMTP server. Ensure tha
 
 ### Cron Job
 
-A cron job runs daily at midnight to check for upcoming membership fees and send reminders.
+A cron job runs daily at midnight to check for upcoming membership fees, and add-on services and send reminders at the scheduled reminder date.

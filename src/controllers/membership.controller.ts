@@ -1,16 +1,43 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { Membership } from 'src/database/membership.entity';
 import { MembershipService } from 'src/services/membership.service';
-import { CreateMembershipDto } from 'src/dto/create-membership.dto';
+import { CreateMembershipDto, CreateMembershipResponseDto } from 'src/dto/create-membership.dto';
+import { PaystackService } from 'src/services/paystack.service';
+import { logger } from 'src/logging/logger';
 
 
 @Controller('/api/memberships')
 export class MembershipController {
-    constructor(private readonly membershipService: MembershipService) {}
+    constructor(
+        private readonly membershipService: MembershipService,
+        private readonly paystackService: PaystackService,
+    ) {}
 
     @Post() // POST Request to create/signup a member
-    async create(@Body() createMembershipDto: CreateMembershipDto): Promise<Membership> {
-        return this.membershipService.create(createMembershipDto);
+    async create(@Body() createMembershipDto: CreateMembershipDto): Promise<CreateMembershipResponseDto> {
+        const membership =  await this.membershipService.create(createMembershipDto);
+
+        // Calculate the total amount including the addOn service charge
+        const totalAmount = membership.totalAmount; // Using the updated total Amount
+        console.log('Paystack Amount: ', totalAmount);
+
+        try {
+            // Initialize Paystack Transaction
+            const transaction = await this.paystackService.initializeTransaction(totalAmount, createMembershipDto.email);
+
+            // Return the authorization url for redirection
+            return {
+                authorizationUrl: transaction.data.authorization_url,
+                membership
+            }
+        } catch (error) {
+            logger.error("Error initializing Paystack transaction:", error);
+        }
+    }
+
+    @Post('verify')
+    async verifyTransaction(@Body() verifyDto: { reference: string}) {
+        return this.paystackService.verifyTransaction(verifyDto.reference);
     }
 
     @Get() // GET Request to retrieve all members

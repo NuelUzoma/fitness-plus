@@ -27,4 +27,13 @@ export class AddOnServices {
     async findAll(): Promise<AddOnService[]> {
         return this.addOnServiceRepository.find({ relations: ['membership'] });
     }
+
+    async clearAddOnServices() {
+        try {
+            await this.addOnServiceRepository.delete({}); // Delete all records
+            console.log('Add-on services cleared successfully');
+        } catch (error) {
+            console.error("Error clearing add-on services:", error);
+        }
+    }
 }

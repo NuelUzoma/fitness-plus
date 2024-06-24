@@ -11,6 +11,7 @@ import { AddOnServices } from './services/addOn.service';
 import { CronJobService } from './services/cron-job.service';
 import { WinstonLoggerService } from './logging/logger';
 // import { AuthModule } from './auth/auth.module';
+import { PaystackService } from './services/paystack.service';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { WinstonLoggerService } from './logging/logger';
     // AuthModule,
   ],
   controllers: [MembershipController, AddOnServiceController],
-  providers: [MembershipService, AddOnServices, CronJobService, WinstonLoggerService],
+  providers: [MembershipService, AddOnServices, CronJobService, WinstonLoggerService, PaystackService],
 })
+
+
 export class AppModule {}

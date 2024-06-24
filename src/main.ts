@@ -6,11 +6,9 @@ import { morganMiddleware } from './middlewares/morgan.middleware';
 import { HttpExceptionFilter } from './middlewares/httpException.middleware';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: false,
-  });
+  const app = await NestFactory.create(AppModule);
 
-  app.useLogger(new WinstonLoggerService())
+  app.useLogger(new WinstonLoggerService());
 
   app.use(morganMiddleware);
   
