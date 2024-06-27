@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Membership } from './database/membership.entity';
-import { AddOnService } from './database/addOnService.entity';
-import { MembershipController } from './controllers/membership.controller';
-import { AddOnServiceController } from './controllers/addOn.controller';
-import { MembershipService } from './services/membership.service';
-import { AddOnServices } from './services/addOn.service';
-import { CronJobService } from './services/cron-job.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { Membership } from './membership/entity/membership.entity';
+import { AddOnService } from './addOnServices/entity/addOnService.entity';
+import { CronJobService } from './cronServices/cron-job.service';
+import { WinstonLoggerService } from './logging/logger';
+// import { AuthModule } from './auth/auth.module';
+import { AddOnModule } from './addOnServices/addOn.module';
+import { MembershipModule } from './membership/membership.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true, // Make the configuration available globally
       envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
@@ -30,8 +31,14 @@ import { CronJobService } from './services/cron-job.service';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Membership, AddOnService]),
+    ScheduleModule.forRoot(),
+    // AuthModule,
+    AddOnModule,
+    MembershipModule
   ],
-  controllers: [MembershipController, AddOnServiceController],
-  providers: [MembershipService, AddOnServices, CronJobService],
+  controllers: [],
+  providers: [CronJobService, WinstonLoggerService],
 })
+
+
 export class AppModule {}

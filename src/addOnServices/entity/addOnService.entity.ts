@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Membership } from './membership.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Membership } from '../../membership/entity/membership.entity';
 
 
 export enum ServiceName { // ENumerator for service names
@@ -12,8 +12,8 @@ export class AddOnService {
     @PrimaryGeneratedColumn()
     id: number;
 
-    // @Column()
-    // membershipId: number;
+    @Column()
+    membershipId: number;
 
     @Column({
         type: "enum",
@@ -30,6 +30,7 @@ export class AddOnService {
     dueDate: Date
 
     @ManyToOne(() => Membership, membership => membership.addOnServices)
+    @JoinColumn({ name: "membershipId", referencedColumnName: "id" })
     membership: Membership; // Many-To-One relationship with members
 
 
