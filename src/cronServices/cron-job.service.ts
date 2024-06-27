@@ -3,7 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Membership, MembershipType } from '../database/membership.entity';
+import { Membership, MembershipType } from '../membership/entity/membership.entity';
 import { logger } from 'src/logging/logger';
 import * as nodemailer from 'nodemailer';
 import { isAfter, isBefore, subDays } from 'date-fns';
@@ -18,7 +18,7 @@ export class CronJobService {
         private readonly configService: ConfigService,
     ) {}
 
-    @Cron("* * * * *") // Cron job set to run daily every MIDNIGHT!
+    @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Cron job set to run daily every MIDNIGHT!
     async handleCron() {
         logger.info('Cron job triggered');
         const memberships = await this.membershipRepository.find();

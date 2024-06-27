@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber } from 'class-validator';
-import { ServiceName } from 'src/database/addOnService.entity';
+import { ServiceName } from 'src/addOnServices/entity/addOnService.entity';
 
 export class CreateAddonDto {
     @IsNumber()

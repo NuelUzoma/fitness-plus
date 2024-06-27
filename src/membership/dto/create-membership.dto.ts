@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsBoolean, ValidateNested, IsArray } from 'class-validator';
-import { Membership, MembershipType } from 'src/database/membership.entity';
-import { CreateAddonDto } from './create-addon.dto';
+import { Membership, MembershipType } from 'src/membership/entity/membership.entity';
+import { CreateAddonDto } from '../../addOnServices/dto/create-addon.dto';
 import { Type } from 'class-transformer';
 
 // Data Transfer Object expected by the application

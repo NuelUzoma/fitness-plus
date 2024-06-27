@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { Membership } from 'src/database/membership.entity';
-import { MembershipService } from 'src/services/membership.service';
-import { CreateMembershipDto, CreateMembershipResponseDto } from 'src/dto/create-membership.dto';
-import { PaystackService } from 'src/services/paystack.service';
+import { Membership } from 'src/membership/entity/membership.entity';
+import { MembershipService } from 'src/membership/service/membership.service';
+import { CreateMembershipDto, CreateMembershipResponseDto } from 'src/membership/dto/create-membership.dto';
+import { PaystackService } from 'src/paystackService/paystack.service';
 import { logger } from 'src/logging/logger';
 
 

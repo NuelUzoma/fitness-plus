@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { AddOnService } from 'src/database/addOnService.entity';
-import { AddOnServices } from 'src/services/addOn.service';
-import { CreateAddonDto } from 'src/dto/create-addon.dto';
+import { AddOnService } from 'src/addOnServices/entity/addOnService.entity';
+import { AddOnServices } from 'src/addOnServices/service/addOn.service';
+import { CreateAddonDto } from 'src/addOnServices/dto/create-addon.dto';
 
 
 @Controller('/api/addons')

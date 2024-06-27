@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AddOnService } from 'src/database/addOnService.entity';
-import { CreateAddonDto } from 'src/dto/create-addon.dto';
+import { AddOnService } from 'src/addOnServices/entity/addOnService.entity';
+import { CreateAddonDto } from 'src/addOnServices/dto/create-addon.dto';
 
 
 @Injectable()

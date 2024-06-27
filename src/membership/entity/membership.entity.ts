@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { AddOnService } from './addOnService.entity';
+import { AddOnService } from '../../addOnServices/entity/addOnService.entity';
 
 export enum MembershipType { // Enumerator for membership types
     ANNUAL_BASIC = 'Annual Basic',

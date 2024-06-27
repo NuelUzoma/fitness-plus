@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Membership } from './membership.entity';
+import { Membership } from '../../membership/entity/membership.entity';
 
 
 export enum ServiceName { // ENumerator for service names

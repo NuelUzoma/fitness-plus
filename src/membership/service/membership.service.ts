@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
-import { Membership } from 'src/database/membership.entity';
-import { AddOnService } from 'src/database/addOnService.entity';
-import { CreateMembershipDto } from 'src/dto/create-membership.dto';
+import { Membership } from 'src/membership/entity/membership.entity';
+import { AddOnService } from 'src/addOnServices/entity/addOnService.entity';
+import { CreateMembershipDto } from 'src/membership/dto/create-membership.dto';
 import { logger } from 'src/logging/logger';
 
 
